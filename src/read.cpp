@@ -100,13 +100,28 @@ void Sample::expect(char c) {
   if (got != c) {
     cerr << "Error in Sample::expect: Expected '" << c << "' (ASCII: " << (int)c << "), but got '" << got << "' (ASCII: " << (int)got << ")" << endl;
     cerr << "Current file position: " << ftell(fp) << endl;
-    cerr << "Last 20 characters read: ";
-    for (int i = 0; i < 20; i++) {
+
+    // Print 200 characters before the error
+    long current_pos = ftell(fp);
+    fseek(fp, max(0L, current_pos - 201), SEEK_SET);
+    cerr << "Content before error (up to 200 characters): ";
+    for (int i = 0; i < 200; i++) {
       char ch = fgetc(fp);
       if (ch == EOF) break;
       cerr << ch;
     }
     cerr << endl;
+
+    // Print 200 characters after the error
+    fseek(fp, current_pos, SEEK_SET);
+    cerr << "Content after error (up to 200 characters): ";
+    for (int i = 0; i < 200; i++) {
+      char ch = fgetc(fp);
+      if (ch == EOF) break;
+      cerr << ch;
+    }
+    cerr << endl;
+
     assert(false && "Unexpected character in input");
   }
 }
