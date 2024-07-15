@@ -101,24 +101,32 @@ void Sample::expect(char c) {
     cerr << "Error in Sample::expect: Expected '" << c << "' (ASCII: " << (int)c << "), but got '" << got << "' (ASCII: " << (int)got << ")" << endl;
     cerr << "Current file position: " << ftell(fp) << endl;
 
-    // Print 6000 characters before the error
+    // Print 6000 non-whitespace characters before the error
     long current_pos = ftell(fp);
-    fseek(fp, max(0L, current_pos - 6001), SEEK_SET);
-    cerr << "Content before error (up to 6000 characters): ";
-    for (int i = 0; i < 6000; i++) {
+    fseek(fp, max(0L, current_pos - 12001), SEEK_SET);  // Double the seek to account for potential whitespace
+    cerr << "Content before error (up to 6000 non-whitespace characters): ";
+    int count = 0;
+    while (count < 6000) {
       char ch = fgetc(fp);
       if (ch == EOF) break;
-      cerr << ch;
+      if (!isspace(ch)) {
+        cerr << ch;
+        count++;
+      }
     }
     cerr << endl;
 
-    // Print 6000 characters after the error
+    // Print 6000 non-whitespace characters after the error
     fseek(fp, current_pos, SEEK_SET);
-    cerr << "Content after error (up to 6000 characters): ";
-    for (int i = 0; i < 6000; i++) {
+    cerr << "Content after error (up to 6000 non-whitespace characters): ";
+    count = 0;
+    while (count < 6000) {
       char ch = fgetc(fp);
       if (ch == EOF) break;
-      cerr << ch;
+      if (!isspace(ch)) {
+        cerr << ch;
+        count++;
+      }
     }
     cerr << endl;
 
