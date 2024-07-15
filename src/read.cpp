@@ -101,21 +101,21 @@ void Sample::expect(char c) {
     cerr << "Error in Sample::expect: Expected '" << c << "' (ASCII: " << (int)c << "), but got '" << got << "' (ASCII: " << (int)got << ")" << endl;
     cerr << "Current file position: " << ftell(fp) << endl;
 
-    // Print 200 characters before the error
+    // Print 3000 characters before the error
     long current_pos = ftell(fp);
-    fseek(fp, max(0L, current_pos - 201), SEEK_SET);
-    cerr << "Content before error (up to 200 characters): ";
-    for (int i = 0; i < 200; i++) {
+    fseek(fp, max(0L, current_pos - 3001), SEEK_SET);
+    cerr << "Content before error (up to 3000 characters): ";
+    for (int i = 0; i < 3000; i++) {
       char ch = fgetc(fp);
       if (ch == EOF) break;
       cerr << ch;
     }
     cerr << endl;
 
-    // Print 200 characters after the error
+    // Print 3000 characters after the error
     fseek(fp, current_pos, SEEK_SET);
-    cerr << "Content after error (up to 200 characters): ";
-    for (int i = 0; i < 200; i++) {
+    cerr << "Content after error (up to 3000 characters): ";
+    for (int i = 0; i < 3000; i++) {
       char ch = fgetc(fp);
       if (ch == EOF) break;
       cerr << ch;
